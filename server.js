@@ -29,7 +29,8 @@ function start() {
                          "Add Role",
                          "View Departments",
                          "View Employees",
-                         "View Roles"
+                         "View Roles",
+                         "Update Employee Role by ID"
             ]
             }
         ]).then(function(answer) {
@@ -45,6 +46,8 @@ function start() {
     viewEmployee();
 }   else if (answer.selection === "View Roles") {
     viewRoles();
+}   else if (answer.selection === "Update Employee Role by ID") {
+    updateRole();
 }
 });
 };
@@ -180,3 +183,49 @@ function viewEmployee () {
         start();
     })
 }
+
+function updateRole() {
+    let employList = "SELECT * FROM employee";
+
+    connection.query(employList, function(err, res1) {
+        if (err) throw err;
+    //console.table(res1)
+
+    for ( i = 0 ; i < res1.length; i++){
+
+    console.log(res1[i].id)
+
+    var slot = res1
+
+    console.log(slot)
+
+    inquirer
+        .prompt([
+            {
+                name: "selection",
+                type: "list",
+                message: "Employee List by Id",
+                choices: slot, 
+            }
+        ]).then(function(answer) {
+            if (answer.selection === res1[i]) {
+                 inquirer.prompt([
+                     {
+                         name: 'Decision',
+                         type: "input",
+                         message: "What do you want to change the employee role to. Please specify by role_id #"
+                     }
+                 ])
+
+    var sql = "UPDATE employee SET row_id ="+Decision+", WHERE row_id ="+answer.selection
+
+    connection.query(sql, function(err, res2) {
+        if (err) throw err;
+        console.table(res2);
+        start();
+    })
+}
+        })
+        }
+    })
+} 
