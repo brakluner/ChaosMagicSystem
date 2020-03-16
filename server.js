@@ -30,7 +30,8 @@ function start() {
                          "View Departments",
                          "View Employees",
                          "View Roles",
-                         "Update Employee Role by ID"
+                         "Update Employee Role by ID",
+                         "Update Employee Manager by ID"
             ]
             }
         ]).then(function(answer) {
@@ -48,9 +49,10 @@ function start() {
     viewRoles();
 }   else if (answer.selection === "Update Employee Role by ID") {
     updateRole();
-}
-});
+}   else if (answer.selection === "Update Employee Manager by ID") {
+    updateManager();
 };
+});
 
 function createRole() {
 
@@ -134,7 +136,7 @@ function createEmployee() {
             {
                 name: "manager_id",
                 type: "input",
-                message: "Now we need your manager id,... Puhleeeze...(numbers only)",
+                message: "Now we need your manager's id,... Puhleeeze...(numbers only)",
             }
         ]).then(function(rosterList) {
             connection.query("INSERT INTO employee SET ?", 
@@ -225,7 +227,7 @@ function updateRole() {
             {
                 name: "selection",
                 type: "list",
-                message: "Employee List by Id",
+                message: "Choose Employee by Id",
                 choices: slot
             },
       
@@ -233,7 +235,7 @@ function updateRole() {
                      {
                          name: 'Decision',
                          type: "input",
-                         message: "What do you want to change the employee role to. Please specify by role_id #"
+                         message: "What do you want to change the employee role to. Please specify by Role id#"
                      }
                     
                  ]).then(function(answer) {
@@ -250,3 +252,50 @@ function updateRole() {
        
     })
 }
+
+function updateManager() {
+    let employList = "SELECT * FROM employee";
+
+    connection.query(employList, function(err, res1) {
+        if (err) throw err;
+    console.table(res1)
+    
+    let slot = res1.map(function (slit, index, array) {
+        return slit.id; 
+      });
+      console.log(slot);
+    
+    console.log(slot)
+    
+    inquirer
+        .prompt([
+            {
+                name: "selection",
+                type: "list",
+                message: "Choose Employee by Id",
+                choices: slot
+            },
+      
+    
+                     {
+                         name: 'Decision',
+                         type: "input",
+                         message: "What do you want to change the employee's Manager to. Please specify by Managers id#"
+                     }
+                    
+                 ]).then(function(answer) {
+                 
+    var sql = "UPDATE employee SET manager_id ="+answer.Decision+" WHERE id ="+answer.selection
+
+    connection.query(sql, function(err, res2) {
+        if (err) throw err;
+        console.table(res2);
+        start();
+    })
+
+        })
+       
+    })
+}
+}
+

@@ -1,2 +1,2 @@
-CMS: Chaos Magic System. By powers not understood by human beings, the CMS works, from the command line, run the server, and it will link up
+CMS: Chaos Mech System. By powers not understood by human beings, the CMS works, from the command line, run the server, and it will link up
 with your database and save/view/delete departments, roles, and employees.
